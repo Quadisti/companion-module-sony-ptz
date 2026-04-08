@@ -16,6 +16,9 @@ function splitInt16Array(value: string): number[] {
 }
 
 export class ModuleInstance extends InstanceBase<ModuleConfig> {
+	parseVariablesInString(arg0: string) {
+		throw new Error('Method not implemented.')
+	}
 	config!: ModuleConfig // Setup in init()
 	ptz?: SonyPTZ
 	timeoutID?: ReturnType<typeof setTimeout>

@@ -212,8 +212,10 @@ export function UpdateActions(self: ModuleInstance): void {
 	const SPEED_PARAM_ACTION_FUNC = async (event: CompanionActionEvent) => {
 		const v = commands[event.options.val as string]
 		const p = structuredClone(v.params)
-		const speed = (event.options.speed as number).toString()
-		const half = Math.floor((event.options.speed as number) / 2).toString()
+		const speedStr = await self.parseVariablesInString(event.options.speed as string)
+		const speedNum = parseFloat(speedStr) || 0
+		const speed = speedNum.toString()
+		const half = Math.floor(speedNum / 2).toString()
 		if (p.PanTiltMove) {
 			p.PanTiltMove = (p.PanTiltMove as string).replaceAll('{speed}', speed).replaceAll('{speed/2}', half)
 		} else if (p.ZoomMove) {
@@ -248,21 +250,19 @@ export function UpdateActions(self: ModuleInstance): void {
 			if (item[0] === 'PTZ Move') {
 				action.options.push({
 					id: 'speed',
-					type: 'number',
+					type: 'textinput',
 					label: 'Speed',
-					default: DEFAULT_PTZ_MOVE_SPEED,
-					min: 0,
-					max: 24,
+					default: DEFAULT_PTZ_MOVE_SPEED.toString(),
+					useVariables: true,
 				})
 				action.callback = SPEED_PARAM_ACTION_FUNC
 			} else if (item[0] === 'PTZ Zoom') {
 				action.options.push({
 					id: 'speed',
-					type: 'number',
+					type: 'textinput',
 					label: 'Speed',
-					default: DEFAULT_PTZ_ZOOM_SPEED,
-					min: 0,
-					max: 32766,
+					default: DEFAULT_PTZ_ZOOM_SPEED.toString(),
+					useVariables: true,
 				})
 				action.callback = SPEED_PARAM_ACTION_FUNC
 			}
